@@ -1,18 +1,28 @@
 const express = require('express')
 const cors = require('cors')
 const bodyParser = require('body-parser')
+const { verifyAuth } = require('./middleware/auth/verifyAuth')
+const router = require("./routes/routes")
+const token = require("./middleware/token/generateToken")
+const jwt = require('jsonwebtoken')
 require('dotenv').config()
+
 
 // Define App
 const app = express()
 
 // configure the app
-app.use(bodyParser)
-app.use(cors)
+app.use(bodyParser.json())
+app.use(express.urlencoded({ extended: true }))
+app.use(cors({
+    "Access-Control-Allow-Origin":"*",
+    "credentials":true,}
+));
 
+app.use("/api",router)
 
 //create your first api
-app.get("/health",(req,res)=>{res.json("message':'alive")})
+app.use("/token",token)
 
 //start server
 app.listen(process.env.SERVER_PORT,()=>{console.log(`Omerald Doc server is live on ${process.env.SERVER_PORT}...`)})
