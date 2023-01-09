@@ -1,10 +1,8 @@
 const express = require('express')
 const cors = require('cors')
 const bodyParser = require('body-parser')
-const { verifyAuth } = require('./middleware/auth/verifyAuth')
 const router = require("./routes/routes")
 const token = require("./middleware/token/generateToken")
-const jwt = require('jsonwebtoken')
 require('dotenv').config()
 
 

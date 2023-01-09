@@ -19,7 +19,6 @@ awsRouter.post("/uploadFile",(req,res)=>{
         };
         s3.upload(params, function(s3Err, data) {
             if (s3Err) throw s3Err
-            console.log(`File uploaded successfully at ${data.Location}`)
             res.status(200).send(data)
         });
 });
