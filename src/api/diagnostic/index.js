@@ -2,7 +2,9 @@ const multer = require("multer");
 const aws = require("aws-sdk");
 const {Router} = require('express');
 const diagnosticRouter = Router()
-const DiagnosticUserSchema = require("../../middleware/database/models/diagnostic")
+const DiagnosticUserSchema = require("../../middleware/database/models/diagnostic");
+const reportRouter = require("./reports");
+const express = require("express");
 
 // Authentication to be still added
 // configure the AWS SDK
@@ -46,6 +48,32 @@ diagnosticRouter.post("/uploadBranding", upload.single("file"), (req, res) => {
   });
 });
 
+diagnosticRouter.post("/uploadReport", upload.single("file"), (req, res) => {
+  // get file from the request
+  const file = req.file;
+  // create a unique filename for the file in S3
+  const s3FileName = `${Date.now()}-${file.originalname}`;
+  
+  // set up S3 upload parameters
+  const params = {
+    Bucket: process.env.AWS_BUCKET_Omerald_Reports,
+    Key: s3FileName,
+    Body: file.buffer,
+    ContentType: file.mimetype,
+    ACL: "public-read"
+  };
+  
+  // upload the file to S3
+  s3.upload(params, (error, data) => {
+    if (error) {
+      return res.status(500).send(error);
+    }
+    
+    // return the URL of the file in S3
+    return res.status(200).send({ location: data.Location });
+  });
+});
+
 diagnosticRouter.get("/getDiagnosticUser", (req, res) => {
   const {userId} = req.query;
   diagnosticUser.findOne({"phoneNumber":'+'+userId.replace(" ","")})
@@ -68,5 +96,6 @@ diagnosticRouter.post("/updateDiagnosticUser", (req, res) => {
     .then(items => res.json(items))
     .catch(err => res.status(400).json('Error: ' + err));
 })
+
 
 module.exports = diagnosticRouter

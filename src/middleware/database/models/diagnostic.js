@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const connectToDiagnosticDatabase = require('../connections/diagnostic');
 
 const BrandDetailsForm = {
     brandLogo: String,
@@ -47,4 +48,4 @@ const DiagnosticUserSchema = new mongoose.Schema({
     activities: [ActivityDetails]
 });
 
-module.exports = mongoose.model('diagnosticusers', DiagnosticUserSchema);
+module.exports = connectToDiagnosticDatabase().model('diagnosticusers', DiagnosticUserSchema);

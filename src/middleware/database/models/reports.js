@@ -1,4 +1,5 @@
-const mongoose = require('mongoose')
+const mongoose = require('mongoose');
+const connectToDiagnosticDatabase = require('../connections/diagnostic');
 
 const ReportParamsType = {
     keyword: {type:String},
@@ -26,4 +27,4 @@ const DiagnosticReportSchema = new mongoose.Schema({
     updatedAt: {type: Date}
 })
 
-module.exports = mongoose.model('reports', DiagnosticReportSchema)
+module.exports = connectToDiagnosticDatabase().model('reports', DiagnosticReportSchema)

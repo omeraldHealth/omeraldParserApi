@@ -6,6 +6,8 @@ const reportRouter = Router()
 const ReportTypeSchema = require('../../../middleware/database/models/reportType')
 const DiagnosticReportSchema = require("../../../middleware/database/models/reports");
 const { json } = require("body-parser");
+
+
 // Authentication to be still added
 // configure the AWS SDK
 aws.config.update({
@@ -32,8 +34,8 @@ reportRouter.post("/insertDiagnosticReport", (req, res) => {
 
 reportRouter.get("/getDiagnosticReports",(req, res) => {
   const diagnosticReport = DiagnosticReportSchema;
-  const {reportId} = req.query
-  diagnosticReport.find({ _id: {$in: JSON.parse(reportId)} })
+  const {userId} = req.query
+  diagnosticReport.find({userId:"+918553548534"})
     .then(items => res.json(items))
     .catch(err => res.status(400).json('Error: ' + err));
 });
