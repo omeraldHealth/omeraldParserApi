@@ -42,29 +42,31 @@ reportRouter.get("/getDiagnosticReports",(req, res) => {
 
 reportRouter.post("/uploadReportFile", upload.single("file"), (req, res) => {
   // get file from the request
+  console.log(req)
   const file = req.file;
-
+  console.log(file)
   // create a unique filename for the file in S3
-  const s3FileName = `${Date.now()}-${file.originalname}`;
+  // const s3FileName = `${Date.now()}-${file.originalname}`;
   
   // set up S3 upload parameters
-  const params = {
-    Bucket: process.env.AWS_BUCKET_Omerald_Reports,
-    Key: s3FileName,
-    Body: file.buffer,
-    ContentType: file.mimetype,
-    ACL: "public-read"
-  };
-  
+  // const params = {
+  //   Bucket: process.env.AWS_BUCKET_Omerald_Reports,
+  //   Key: s3FileName,
+  //   Body: file.buffer,
+  //   ContentType: file.mimetype,
+  //   ACL: "public-read"
+  // };
+  // console.log(this.param)
   // upload the file to S3
-  s3.upload(params, (error, data) => {
-    if (error) {
-      return res.status(500).send(error);
-    }
+  // s3.upload(params, (error, data) => {
+  //   if (error) {
+  //     return res.status(500).send(error);
+  //   }
     
-    // return the URL of the file in S3
-    return res.status(200).send({ location: data.Location });
-  });
+  //   // return the URL of the file in S3
+  //   return res.status(200).send({ location: data.Location });
+  // });
 });
+
 
 module.exports = reportRouter
