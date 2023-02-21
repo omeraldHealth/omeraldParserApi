@@ -15,16 +15,23 @@ const IManagerDetails = {
 
 const ActivityDetails = {
     activity: String,
-    updatedTime: {type: Date,
-        default: Date.now},
+    user: IManagerDetails,
+    updatedTime: {type: Date,default: Date.now},
 };
 
-const ReportParamsType = {
-    keyword: {type:String},
+const BranchDetail = {
+    branchName: String,
+    branchEmail: String,
+    branchAddress: String,
+    branchContact: String,
+    branchManager: IManagerDetails,
+}
+
+const ReportParamsType = { keyword: {type:String},
     aliases:  {type:[String]},
     normalRange:  {type:String},
     unit:  {type:String},
-  };
+};
 
 const ReportType = {
   testName: {type:String,required:true},
@@ -41,11 +48,11 @@ const DiagnosticUserSchema = new mongoose.Schema({
     sharedReport: {type:[String]},
     address: {type:String},
     reports: {type:[String]},
-    updatedAt: {type: Date,
-        default: Date.now},
+    updatedAt: {type: Date,default: Date.now},
     brandDetails: [BrandDetailsForm],
     managersDetail: [IManagerDetails],
-    activities: [ActivityDetails]
+    activities: [ActivityDetails],
+    branchDetails: [BranchDetail]
 });
 
 module.exports = connectToDiagnosticDatabase().model('diagnosticusers', DiagnosticUserSchema);
