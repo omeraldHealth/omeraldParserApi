@@ -3,8 +3,10 @@ const aws = require("aws-sdk");
 const {Router} = require('express');
 const diagnosticRouter = Router()
 const DiagnosticUserSchema = require("../../middleware/database/models/diagnostic");
+const QuerySchema = require("../../middleware/database/models/queries")
 const reportRouter = require("./reports");
 const express = require("express");
+const nodemailer = require('nodemailer')
 
 // Authentication to be still added
 // configure the AWS SDK
@@ -21,6 +23,7 @@ const s3 = new aws.S3();
 const upload = multer();
 
 const diagnosticUser = DiagnosticUserSchema;
+const diagnosticQuery = QuerySchema;
 
 diagnosticRouter.post("/uploadBranding", upload.single("file"), (req, res) => {
   // get file from the request
@@ -97,5 +100,49 @@ diagnosticRouter.post("/updateDiagnosticUser", (req, res) => {
     .catch(err => res.status(400).json('Error: ' + err));
 })
 
+diagnosticRouter.post("/createQuery", (req, res) => {
+  const { name, email, phoneNumber, subject, message } = req.body;
+  console.log(req.body)
+  // create reusable transporter object using the default SMTP transport
+  let transporter = nodemailer.createTransport({
+    service: 'gmail',
+    host: 'smtp.gmail.com',
+    port: 587,
+    secure: false,
+    auth: {
+      user: 'saifmohammed.campk12@gmail.com',
+      pass: 'ipozhvblhgjqvjou',
+    },
+  });
+
+  // send mail with defined transport object
+  let mailOptions = {
+    from: email,
+    to: 'saifmohammed888@gmail.com',
+    subject: subject,
+    text: `${message}\n\nFrom: ${name} <${email}>`,
+  };
+
+  transporter.sendMail(mailOptions, (error, info) => {
+    if (error) {
+      res.status(500).send('Something went wrong. Please try again later.');
+    } else {
+      diagnosticQuery.insertMany(req.body)
+      .then(items => console.log("Query inserted to db"))
+      .catch(err => console.log('Error: ' + err));
+      console.log('Email sent: ' + info.response);
+      res.status(200).send('Thank you for your message. We will get back to you soon!');
+    }
+  });
+})
+
+diagnosticRouter.get("/getQuery", (req, res) => {
+  const {userId} = req.query;
+  console.log(userId)
+  diagnosticQuery.find({"phoneNumber":"+"+userId.replace(" ",'')})
+    .then(items => res.json(items))
+    .catch(err => res.status(400).json('Error: ' + err));
+    {}
+})
 
 module.exports = diagnosticRouter

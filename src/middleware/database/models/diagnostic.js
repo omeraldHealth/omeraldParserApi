@@ -27,6 +27,12 @@ const BranchDetail = {
     branchManager: IManagerDetails,
 }
 
+const IPathologistDetails = {
+    name: String,
+    designation: String,
+    signature: String
+}
+
 const ReportParamsType = { keyword: {type:String},
     aliases:  {type:[String]},
     normalRange:  {type:String},
@@ -52,7 +58,8 @@ const DiagnosticUserSchema = new mongoose.Schema({
     brandDetails: [BrandDetailsForm],
     managersDetail: [IManagerDetails],
     activities: [ActivityDetails],
-    branchDetails: [BranchDetail]
+    branchDetails: [BranchDetail],
+    pathologistDetail: [IPathologistDetails],
 });
 
 module.exports = connectToDiagnosticDatabase().model('diagnosticusers', DiagnosticUserSchema);

@@ -35,7 +35,7 @@ reportRouter.post("/insertDiagnosticReport", (req, res) => {
 reportRouter.get("/getDiagnosticReports",(req, res) => {
   const diagnosticReport = DiagnosticReportSchema;
   const {userId} = req.query
-  diagnosticReport.find({userId:"+918553548534"})
+  diagnosticReport.find({userId:"+"+userId.replace(" ",'')})
     .then(items => res.json(items))
     .catch(err => res.status(400).json('Error: ' + err));
 });
