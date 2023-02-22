@@ -10,7 +10,7 @@ const BrandDetailsForm = {
 const IManagerDetails = {
     managerName: String,
     managerRole: String,
-    managerSignature: String
+    managerContact: String
 };
 
 const ActivityDetails = {
