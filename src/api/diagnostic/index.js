@@ -4,9 +4,8 @@ const {Router} = require('express');
 const diagnosticRouter = Router()
 const DiagnosticUserSchema = require("../../middleware/database/models/diagnostic");
 const QuerySchema = require("../../middleware/database/models/queries")
-const reportRouter = require("./reports");
-const express = require("express");
-const nodemailer = require('nodemailer')
+const nodemailer = require('nodemailer');
+const connectToDiagnosticDatabase = require("../../middleware/database/connections/diagnostic");
 
 // Authentication to be still added
 // configure the AWS SDK
@@ -54,6 +53,7 @@ diagnosticRouter.post("/uploadBranding", upload.single("file"), (req, res) => {
 diagnosticRouter.post("/uploadReport", upload.single("file"), (req, res) => {
   // get file from the request
   const file = req.file;
+  console.log(req.file)
   // create a unique filename for the file in S3
   const s3FileName = `${Date.now()}-${file.originalname}`;
   
@@ -82,6 +82,7 @@ diagnosticRouter.get("/getDiagnosticUser", (req, res) => {
   diagnosticUser.findOne({"phoneNumber":'+'+userId.replace(" ","")})
     .then(items => res.json(items))
     .catch(err => res.status(400).json('Error: ' + err));
+
 })
 
 diagnosticRouter.post("/saveDiagnosticUser", (req, res) => {

@@ -40,6 +40,7 @@ const ReportParamsType = { keyword: {type:String},
 };
 
 const ReportType = {
+  sampleName: {type:String,required:true},
   testName: {type:String,required:true},
   keywords: [ReportParamsType]
 }
