@@ -13,8 +13,7 @@ const DiagnosticReportSchema = new mongoose.Schema({
     userName: {type:String,required:true},
     email: {type:String,required:true},
     gender: {type:String,required:true},
-    dob: {type: Date,
-        default: Date.now},
+    dob: {type: Date},
     doctorName: {type:String},
     reportId: {type:String},
     reportUrl: {type:String},
@@ -23,8 +22,14 @@ const DiagnosticReportSchema = new mongoose.Schema({
     testName: {type:String},
     isManualReport: {type:Boolean},
     parsedData:{type:[ReportParamsType]},
-    createdAt:{type: Date},
-    updatedAt: {type: Date}
+    createdAt: {
+        type: Date,
+        default: Date.now
+      },
+    updatedAt: {
+        type: Date,
+        default: Date.now
+      }
 })
 
 module.exports = connectToDiagnosticDatabase().model('reports', DiagnosticReportSchema)

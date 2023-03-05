@@ -47,10 +47,10 @@ const ReportType = {
 
 const DiagnosticUserSchema = new mongoose.Schema({
     diagnosticName: {type:String,required:true},
-    fullName: {type:String,required:true},
+    fullName: {type:String},
     tests: {type:[ReportType]},
     phoneNumber: {type:String,required:true},
-    branch: {type:String,required:true},
+    branch: {type:String},
     email: {type:String,required:true},
     sharedReport: {type:[String]},
     address: {type:String},
