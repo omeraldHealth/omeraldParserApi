@@ -35,7 +35,8 @@ const IPathologistDetails = {
 
 const ReportParamsType = { keyword: {type:String},
     aliases:  {type:[String]},
-    normalRange:  {type:String},
+    minRange:  {type:String},
+    maxRange:  {type:String},
     unit:  {type:String},
 };
 
@@ -49,7 +50,7 @@ const DiagnosticUserSchema = new mongoose.Schema({
     diagnosticName: {type:String,required:true},
     fullName: {type:String},
     tests: {type:[ReportType]},
-    phoneNumber: {type:String,required:true},
+    phoneNumber: {type:String,required:true,unique:true},
     branch: {type:String},
     email: {type:String,required:true},
     sharedReport: {type:[String]},

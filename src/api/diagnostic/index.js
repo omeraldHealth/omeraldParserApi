@@ -85,6 +85,13 @@ diagnosticRouter.get("/getDiagnosticUser", (req, res) => {
 
 })
 
+diagnosticRouter.get("/getAllDiagnosticUsers", (req, res) => {
+  diagnosticUser.find()
+    .then(items => res.json(items))
+    .catch(err => res.status(400).json('Error: ' + err));
+
+})
+
 diagnosticRouter.post("/saveDiagnosticUser", (req, res) => {
   const diagnosticUserObject = req.body;
 
@@ -103,7 +110,6 @@ diagnosticRouter.post("/updateDiagnosticUser", (req, res) => {
 
 diagnosticRouter.post("/createQuery", (req, res) => {
   const { name, email, phoneNumber, subject, message } = req.body;
-  console.log(req.body)
   // create reusable transporter object using the default SMTP transport
   let transporter = nodemailer.createTransport({
     service: 'gmail',
@@ -121,7 +127,7 @@ diagnosticRouter.post("/createQuery", (req, res) => {
     from: email,
     to: 'saifmohammed888@gmail.com',
     subject: subject,
-    text: `${message}\n\nFrom: ${name} <${email}>`,
+    text: `${message}\n\nFrom: ${name} <${email}> \n please reach out at ${phoneNumber} for more details`,
   };
 
   transporter.sendMail(mailOptions, (error, info) => {
@@ -139,7 +145,6 @@ diagnosticRouter.post("/createQuery", (req, res) => {
 
 diagnosticRouter.get("/getQuery", (req, res) => {
   const {userId} = req.query;
-  console.log(userId)
   diagnosticQuery.find({"phoneNumber":"+"+userId.replace(" ",'')})
     .then(items => res.json(items))
     .catch(err => res.status(400).json('Error: ' + err));
