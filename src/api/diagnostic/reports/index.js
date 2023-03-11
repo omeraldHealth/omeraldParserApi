@@ -40,6 +40,14 @@ reportRouter.get("/getDiagnosticReports",(req, res) => {
     .catch(err => res.status(400).json('Error: ' + err));
 });
 
+reportRouter.get("/getAllDiagnosticReports",(req, res) => {
+  const diagnosticReport = DiagnosticReportSchema;
+  diagnosticReport.find()
+    .then(items => res.json(items))
+    .catch(err => res.status(400).json('Error: ' + err));
+});
+
+
 reportRouter.post("/uploadReportFile", upload.single("file"), (req, res) => {
   // get file from the request
   console.log(req)

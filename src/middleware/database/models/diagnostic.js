@@ -40,11 +40,16 @@ const ReportParamsType = { keyword: {type:String},
     unit:  {type:String},
 };
 
+const SampleTypes = {
+    testName:{type:String,required:true},
+    keywords: {type:[ReportParamsType]}
+};
+
 const ReportType = {
   sampleName: {type:String,required:true},
-  testName: {type:String,required:true},
-  keywords: [ReportParamsType]
+  sampleType: {type:SampleTypes,required:true},
 }
+
 
 const DiagnosticUserSchema = new mongoose.Schema({
     diagnosticName: {type:String,required:true},
@@ -57,7 +62,7 @@ const DiagnosticUserSchema = new mongoose.Schema({
     address: {type:String},
     reports: {type:[String]},
     updatedAt: {type: Date,default: Date.now},
-    brandDetails: [BrandDetailsForm],
+    brandDetails: BrandDetailsForm,
     managersDetail: [IManagerDetails],
     activities: [ActivityDetails],
     branchDetails: [BranchDetail],

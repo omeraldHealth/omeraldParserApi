@@ -6,6 +6,9 @@ const DiagnosticUserSchema = require("../../middleware/database/models/diagnosti
 const QuerySchema = require("../../middleware/database/models/queries")
 const nodemailer = require('nodemailer');
 const connectToDiagnosticDatabase = require("../../middleware/database/connections/diagnostic");
+const accountSid = 'AC61a1419b22cabf54b18b08d4d053d665';
+const authToken = '294b485e4ed28b01ac16c4f99dea8405';
+const client = require('twilio')(accountSid, authToken);
 
 // Authentication to be still added
 // configure the AWS SDK
@@ -14,6 +17,8 @@ aws.config.update({
   secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
   region: process.env.AWS_REGION
 });
+
+
 
 // create an S3 instance
 const s3 = new aws.S3();
@@ -132,12 +137,17 @@ diagnosticRouter.post("/createQuery", (req, res) => {
 
   transporter.sendMail(mailOptions, (error, info) => {
     if (error) {
-      res.status(500).send('Something went wrong. Please try again later.');
+
+      // res.status(500).send('Something went wrong. Please try again later.');
+      diagnosticQuery.insertMany(req.body)
+      .then(items => console.log("Query inserted to db"))
+      .catch(err => console.log('Error: ' + err));
+      res.status(200).send('Thank you for your message. We will get back to you soon!');
+     
     } else {
       diagnosticQuery.insertMany(req.body)
       .then(items => console.log("Query inserted to db"))
       .catch(err => console.log('Error: ' + err));
-      console.log('Email sent: ' + info.response);
       res.status(200).send('Thank you for your message. We will get back to you soon!');
     }
   });
@@ -150,5 +160,40 @@ diagnosticRouter.get("/getQuery", (req, res) => {
     .catch(err => res.status(400).json('Error: ' + err));
     {}
 })
+
+diagnosticRouter.post ("/sendWhatsAppText", async (req, res) => {
+  const  {text,to,pdfUrl}  = req.body;
+
+  try {
+    const message = await client.messages.create({
+      body:text,
+      to:`whatsapp:+918553548534`,
+      from: 'whatsapp:+14155238886', 
+      mediaUrl: pdfUrl && pdfUrl
+    });
+
+    res.json({ success: true, message });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ success: false, message: err.message });
+  }
+});
+
+diagnosticRouter.post ("/sendWhatsAppQuery", async (req, res) => {
+  const  {text}  = req.body;
+
+  try {
+    const message = await client.messages.create({
+      body:text,
+      to:`whatsapp:918553548534`,
+      from: 'whatsapp:+14155238886', 
+    });
+
+    res.json({ success: true, message });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ success: false, message: err.message });
+  }
+});
 
 module.exports = diagnosticRouter

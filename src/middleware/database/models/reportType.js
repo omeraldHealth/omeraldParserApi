@@ -4,7 +4,8 @@ const connectToOmeraldDatabase = require('../connections/omerald');
 const ReportParamsType = {
     keyword: {type:String},
     aliases:  {type:[String]},
-    normalRange:  {type:String},
+    minRange:  {type:String},
+    maxRange:  {type:String},
     unit:  {type:String},
   };
 
