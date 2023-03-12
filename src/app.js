@@ -12,6 +12,16 @@ require('dotenv').config()
 // Define App
 const app = express()
 
+// Cross origin
+app.use(cors(
+    {
+        origin: '*',
+        methods: '*',
+        allowedHeaders: '*',
+        exposedHeaders: '*',
+    },
+));
+
 // configure the app
 app.use(express.urlencoded({ extended: true }))
 app.use(cors({
