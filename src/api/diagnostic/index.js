@@ -9,6 +9,7 @@ const connectToDiagnosticDatabase = require("../../middleware/database/connectio
 const accountSid = 'AC61a1419b22cabf54b18b08d4d053d665';
 const authToken = '294b485e4ed28b01ac16c4f99dea8405';
 const client = require('twilio')(accountSid, authToken);
+const cors = require('cors');
 
 // Authentication to be still added
 // configure the AWS SDK
@@ -179,6 +180,7 @@ diagnosticRouter.post ("/sendWhatsAppText", async (req, res) => {
   }
 });
 
+diagnosticRouter.use(cors)
 diagnosticRouter.post ("/sendWhatsAppQuery", async (req, res) => {
   const  {text}  = req.body;
 
