@@ -47,7 +47,6 @@ reportRouter.get("/getAllDiagnosticReports",(req, res) => {
     .catch(err => res.status(400).json('Error: ' + err));
 });
 
-
 reportRouter.post("/uploadReportFile", upload.single("file"), (req, res) => {
   // get file from the request
   console.log(req)
@@ -75,6 +74,5 @@ reportRouter.post("/uploadReportFile", upload.single("file"), (req, res) => {
   //   return res.status(200).send({ location: data.Location });
   // });
 });
-
 
 module.exports = reportRouter
