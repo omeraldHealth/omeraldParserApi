@@ -7,9 +7,10 @@ const QuerySchema = require("../../middleware/database/models/queries")
 const nodemailer = require('nodemailer');
 const connectToDiagnosticDatabase = require("../../middleware/database/connections/diagnostic");
 const accountSid = 'AC61a1419b22cabf54b18b08d4d053d665';
-const authToken = '294b485e4ed28b01ac16c4f99dea8405';
+const authToken = '6665d4241dfdf330e7fb7efb46897a32';
 const client = require('twilio')(accountSid, authToken);
 const cors = require('cors');
+
 
 // Authentication to be still added
 // configure the AWS SDK
@@ -59,7 +60,7 @@ diagnosticRouter.post("/uploadBranding", upload.single("file"), (req, res) => {
 diagnosticRouter.post("/uploadReport", upload.single("file"), (req, res) => {
   // get file from the request
   const file = req.file;
-  console.log(req.file)
+
   // create a unique filename for the file in S3
   const s3FileName = `${Date.now()}-${file.originalname}`;
   
@@ -162,40 +163,27 @@ diagnosticRouter.get("/getQuery", (req, res) => {
     {}
 })
 
-diagnosticRouter.post ("/sendWhatsAppText", async (req, res) => {
-  const  {text,to,pdfUrl}  = req.body;
-
-  try {
-    const message = await client.messages.create({
-      body:text,
-      to:`whatsapp:+918553548534`,
-      from: 'whatsapp:+14155238886', 
-      mediaUrl: pdfUrl && pdfUrl
-    });
-
-    res.json({ success: true, message });
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ success: false, message: err.message });
-  }
+diagnosticRouter.get ("/  ", async (req, res) => {
+  client.messages
+  .create({
+    mediaUrl: ['https://omerald-all-reports.s3.amazonaws.com/1676897428778-sample.pdf'],
+    from: 'whatsapp:+14155238886',
+    to: 'whatsapp:+918553548534'
+  })
+  .then(message => 
+    {
+      client.messages.create({
+        body: 'Your Twilio code is 1',
+        from: 'whatsapp:+14155238886',
+        to: 'whatsapp:+918553548534'
+      })
+      .then(message => res.send(message))
+      .catch(err=>res.send(err))
+    }  
+  )
 });
 
 diagnosticRouter.use(cors)
-diagnosticRouter.post ("/sendWhatsAppQuery", async (req, res) => {
-  const  {text}  = req.body;
 
-  try {
-    const message = await client.messages.create({
-      body:text,
-      to:`whatsapp:918553548534`,
-      from: 'whatsapp:+14155238886', 
-    });
-
-    res.json({ success: true, message });
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ success: false, message: err.message });
-  }
-});
 
 module.exports = diagnosticRouter
