@@ -7,7 +7,7 @@ const QuerySchema = require("../../middleware/database/models/queries")
 const nodemailer = require('nodemailer');
 const connectToDiagnosticDatabase = require("../../middleware/database/connections/diagnostic");
 const accountSid = 'AC61a1419b22cabf54b18b08d4d053d665';
-const authToken = '6665d4241dfdf330e7fb7efb46897a32';
+const authToken = '39159ab867398d4561ff9e3a50bc0b29';
 const client = require('twilio')(accountSid, authToken);
 const cors = require('cors');
 
@@ -32,6 +32,7 @@ const diagnosticUser = DiagnosticUserSchema;
 const diagnosticQuery = QuerySchema;
 
 diagnosticRouter.post("/uploadBranding", upload.single("file"), (req, res) => {
+  console.log(req)
   // get file from the request
   const file = req.file;
   // create a unique filename for the file in S3
@@ -60,7 +61,6 @@ diagnosticRouter.post("/uploadBranding", upload.single("file"), (req, res) => {
 diagnosticRouter.post("/uploadReport", upload.single("file"), (req, res) => {
   // get file from the request
   const file = req.file;
-
   // create a unique filename for the file in S3
   const s3FileName = `${Date.now()}-${file.originalname}`;
   
@@ -163,24 +163,15 @@ diagnosticRouter.get("/getQuery", (req, res) => {
     {}
 })
 
-diagnosticRouter.get ("/  ", async (req, res) => {
+diagnosticRouter.post("/sendWhatsAppText", async (req, res) => {
   client.messages
   .create({
-    mediaUrl: ['https://omerald-all-reports.s3.amazonaws.com/1676897428778-sample.pdf'],
+    mediaUrl: [req.body.pdfUrl],
     from: 'whatsapp:+14155238886',
-    to: 'whatsapp:+918553548534'
+    to: 'whatsapp:'+req.body.to
   })
-  .then(message => 
-    {
-      client.messages.create({
-        body: 'Your Twilio code is 1',
-        from: 'whatsapp:+14155238886',
-        to: 'whatsapp:+918553548534'
-      })
-      .then(message => res.send(message))
-      .catch(err=>res.send(err))
-    }  
-  )
+  .then(message => res.send(message))
+  .catch(error => res.send(error) )
 });
 
 diagnosticRouter.use(cors)
