@@ -8,29 +8,32 @@ const BrandDetailsForm = {
 };
 
 const IManagerDetails = {
-    managerName: String,
-    managerRole: String,
-    managerContact: String
+    managerName:  {type:String},
+    managerRole:  {type:String},
+    managerContact:  {type:String},
+    branchId: {type:String},
 };
 
 const ActivityDetails = {
-    activity: String,
+    activity: {type:String},
     user: IManagerDetails,
     updatedTime: {type: Date,default: Date.now},
+    branchId: {type:String},
 };
 
 const BranchDetail = {
-    branchName: String,
-    branchEmail: String,
-    branchAddress: String,
-    branchContact: String,
-    branchManager: IManagerDetails,
+    branchName:  {type:String},
+    branchEmail:  {type:String},
+    branchAddress:  {type:String},
+    branchContact: {type:String},
+    branchOperator: {type:[String]},
 }
 
 const IPathologistDetails = {
-    name: String,
-    designation: String,
-    signature: String
+    name: {type:String},
+    designation: {type:String},
+    signature: {type:String},
+    branchId: {type:String},
 }
 
 const ReportParamsType = { keyword: {type:String},
@@ -48,6 +51,7 @@ const SampleTypes = {
 const ReportType = {
   sampleName: {type:String,required:true},
   sampleType: {type:SampleTypes,required:true},
+  branchId: {type:String,required:true},
 }
 
 

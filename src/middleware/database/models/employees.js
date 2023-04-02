@@ -6,6 +6,7 @@ const EmployeeSchema = new mongoose.Schema({
     managerRole: {type:String,required:true},
     managerContact:{type:String,required:true,unique:true},
     mainBranchId: {type:String,required:true},
+    branchId:  {type:String},
 })
 
 module.exports = connectToDiagnosticDatabase().model('employees', EmployeeSchema)

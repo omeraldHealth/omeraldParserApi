@@ -6,7 +6,7 @@ const ReportParamsType = {
     aliases:  {type:[String]},
     normalRange:  {type:String},
     unit:  {type:String},
-  };
+};
 
 const DiagnosticReportSchema = new mongoose.Schema({
     userId: {type:String,required:true},
@@ -22,6 +22,7 @@ const DiagnosticReportSchema = new mongoose.Schema({
     testName: {type:String},
     isManualReport: {type:Boolean},
     parsedData:{type:[ReportParamsType]},
+    branchId:  {type:String},
     createdAt: {
         type: Date,
         default: Date.now
