@@ -8,7 +8,7 @@ function connectToOmeraldDatabase(){
   mongoose.set('strictQuery', true);
   
   if(!connection){
-    connection = mongoose.createConnection("mongodb+srv://omerald:WGSCcf0aQKFrhs7A@cluster0.52olk.mongodb.net/omerald_backend?retryWrites=true&w=majority", {
+    connection = mongoose.createConnection("mongodb+srv://omerald_diag:Q67VNbv7q8MlrnAp@admindiagnostic.dcs0b80.mongodb.net/?retryWrites=true&w=majority", {
       useNewUrlParser: true,
       useUnifiedTopology: true,
     });  
